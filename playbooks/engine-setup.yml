@@ -1,0 +1,12 @@
+---
+# Example of oVirt setup:
+- name: Setup oVirt
+  hosts: engine
+  vars_files:
+    # Contains encrypted `ovirt_engine_setup_admin_password` variable using ansible-vault
+    - vars/passwords.yml
+  vars:
+    ovirt_engine_setup_version: '4.2'
+    ovirt_engine_setup_organization: '61will.space'
+  roles:
+    - oVirt.engine-setup

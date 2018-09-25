@@ -1,0 +1,7 @@
+virthost ansible_host=virthost2.management.61will.space
+
+[nodes]
+virthost
+
+[nodes:vars]
+ansible_user=root
