@@ -1,0 +1,49 @@
+---
+- name: oVirt infra
+  hosts: engine
+  #  connection: local
+  gather_facts: false
+
+  vars_files:
+    # Contains encrypted `engine_password` varibale using ansible-vault
+    - ../vars/passwords.yml
+
+  vars:
+    vm_state: running
+    wait_for_ip: false
+
+    engine_url: https://ovirtmgr.management.61will.space/ovirt-engine/api
+    engine_user: admin@internal
+    engine_cafile: /etc/pki/ovirt-engine/ca.pem
+
+    openshift_node:
+      cluster: Default
+      domain: 61will.space
+      template: centos7_template
+      memory: 16GiB
+      cores: 2
+      state: "{{ vm_state }}"
+      ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDW5OI/o+gZm8k216iTbnkv5pJnGJfOJ8yMYrJ8c6pYia8ZwkUtFWj/3LzNWO2r/XiMCV9eOfUo8By1adb9WNgWH8fIhT3QwE60nX6HGilbW3EWVJF7WrHeodZJ4oFHzjGr/pmSsTL3lEbw/+ghHD1CrVMmNAuluaU7U9meY2S9iWAcI/5VMQBkyfqOA5uwMmDdBMVw+sS5oRrCKJ1sNqKosnRBmD7V6HvTgkxrmOgHzcxmU4jLN0rur4YCNJDUBZf+ZroHFDRJBwqu6QBqMxc+mzePwE/VAmhaf55Q8w15/Km+ilUcWgoZiYoqIWRLvfSqHbAWhCiqJW9av6YuY8aH lmadsen@rover.home.ljam.me
+      disks:
+        - size: 20GiB
+          name: data
+          storage_domain: data
+          interface: virtio
+      nics:
+        - name: ovirtmgmt
+          network: ovirtmgmt
+          profile: ovirtmgmt
+
+    vms:
+      - name: openshift-master
+        tag: openshift_node
+        profile: "{{ openshift_node }}"
+      - name: openshift-node-1
+        tag: openshift_node
+        profile: "{{ openshift_node }}"
+      - name: openshift-node-2
+        tag: openshift_node
+        profile: "{{ openshift_node }}"
+
+  roles:
+    - oVirt.vm-infra
