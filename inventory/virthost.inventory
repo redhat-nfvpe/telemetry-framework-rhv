@@ -1,10 +1,12 @@
+manager ansible_host=ovirtmgr.management.61will.space
 virthost2 ansible_host=virthost2.management.61will.space
 
 [virthosts]
+manager
 virthost2
 
-[virthosts:vars]
-ansible_user=root
+[engine]
+manager
 
-[engine:children]
-virthosts
+[all:vars]
+ansible_user=root
