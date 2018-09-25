@@ -1,7 +1,10 @@
-virthost ansible_host=virthost2.management.61will.space
+virthost2 ansible_host=virthost2.management.61will.space
 
-[nodes]
-virthost
+[virthosts]
+virthost2
 
-[nodes:vars]
+[virthosts:vars]
 ansible_user=root
+
+[engine:children]
+virthosts

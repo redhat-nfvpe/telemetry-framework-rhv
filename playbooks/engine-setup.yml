@@ -4,7 +4,7 @@
   hosts: engine
   vars_files:
     # Contains encrypted `ovirt_engine_setup_admin_password` variable using ansible-vault
-    - vars/passwords.yml
+    - ../vars/passwords.yml
   vars:
     ovirt_engine_setup_version: '4.2'
     ovirt_engine_setup_organization: '61will.space'
