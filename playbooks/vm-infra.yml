@@ -5,20 +5,20 @@
   gather_facts: false
 
   vars_files:
-    # Contains encrypted `engine_password` varibale using ansible-vault
-    - ../vars/passwords.yml
+    # Contains encrypted `engine_password` variable using ansible-vault
+    - ../vars/{{ password_file }}
 
   vars:
     vm_state: running
     wait_for_ip: false
 
-    engine_url: https://ovirtmgr.management.61will.space/ovirt-engine/api
+    engine_url: https://engine.dev.nfvpe.site/ovirt-engine/api
     engine_user: admin@internal
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
     openshift_node:
       cluster: Default
-      domain: 61will.space
+      domain: dev.nfvpe.site
       template: centos7_template
       memory: 16GiB
       cores: 2
@@ -38,12 +38,45 @@
       - name: openshift-master
         tag: openshift_node
         profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-master.dev.nfvpe.site
+          nic_ip_address: 10.19.111.101
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
       - name: openshift-node-1
         tag: openshift_node
         profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-node-1.dev.nfvpe.site
+          nic_ip_address: 10.19.111.102
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
       - name: openshift-node-2
         tag: openshift_node
         profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-node-2.dev.nfvpe.site
+          nic_ip_address: 10.19.111.103
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
 
   roles:
     - oVirt.vm-infra

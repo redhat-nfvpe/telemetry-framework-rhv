@@ -5,10 +5,10 @@
   gather_facts: false
 
   vars_files:
-    - ../vars/passwords.yml
+    - ../vars/{{ password_file }}
 
   vars:
-    engine_url: https://ovirtmgr.management.61will.space/ovirt-engine/api
+    engine_url: https://engine.dev.nfvpe.site/ovirt-engine/api
     engine_user: admin@internal
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
@@ -18,7 +18,7 @@
     template_memory: 4GiB
     template_cpu: 2
     template_disk_size: 10GiB
-    template_disk_storage: images
+    template_disk_storage: data
 
   roles:
     - oVirt.image-template
