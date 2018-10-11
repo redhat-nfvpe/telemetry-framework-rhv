@@ -10,7 +10,7 @@
 
   vars:
     vm_state: running
-    wait_for_ip: false
+    wait_for_ip: yes
 
     engine_url: https://engine.dev.nfvpe.site/ovirt-engine/api
     engine_user: admin@internal
@@ -19,7 +19,7 @@
     openshift_node:
       cluster: Default
       domain: dev.nfvpe.site
-      template: centos7_template
+      template: rhel7_template
       memory: 16GiB
       cores: 2
       state: "{{ vm_state }}"
