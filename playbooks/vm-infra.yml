@@ -19,7 +19,7 @@
     openshift_node:
       cluster: Default
       domain: dev.nfvpe.site
-      template: rhel7_template
+      template: rhel75_template
       memory: 16GiB
       cores: 2
       state: "{{ vm_state }}"
