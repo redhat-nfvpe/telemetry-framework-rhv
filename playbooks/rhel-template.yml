@@ -12,9 +12,9 @@
     engine_user: admin@internal
     engine_cafile: /etc/pki/ovirt-engine/ca.pem
 
-    qcow_url: file:///home/cloud-user/rhel-server-7.6-beta-1-x86_64-kvm.qcow2
+    qcow_url: file:///home/cloud-user/rhel-server-7.5-update-4-x86_64-kvm.qcow2
     template_cluster: Default
-    template_name: rhel7_template
+    template_name: rhel75_template
     template_memory: 16GiB
     template_cpu: 4
     template_disk_size: 20GiB
