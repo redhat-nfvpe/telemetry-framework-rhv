@@ -50,6 +50,18 @@ in `/home/images/engine/`. We'll use this to spin up our initial `engine` virtua
 
     curl https://access.cdn.redhat.com//content/origin/files/sha256/<unique_string>/rhel-server-7.5-update-4-x86_64-kvm.qcow2?_auth_=<unique_auth_from_link> \
       --output /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2
+      
+> **Invalid `resolv.conf` in guest image**
+>
+> By default, the guest image has `nameserver 192.168.122.1` in the `/etc/resolv.conf` file.
+> Unfortunately this will cause us issues later on when we build the virtual machines for OpenShift
+> because the DNS will need to time out each time we run, resulting in a very long installation
+> process, and likely failure. To resolve this, we can use `virt-edit` to inline delete the
+> invalid nameserver.
+>
+>     sudo yum install guestfish -y
+>     virt-edit --expr 's/nameserver 192.168.122.1//g' \
+>       -a /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2 /etc/resolv.conf
 
 ## Setup repositories and register RHEL
 
