@@ -21,6 +21,13 @@ Ansible playbooks against your host server).
 
 TODO
 
+# DNS Configuration
+
+It's assumed you've setup `dnsmasq` for your internal DNS lookups for the nodes, or
+that you've manually added them to the `/etc/hosts` file on your bastion host and
+the physical host, virtual machines etc (it's recommended that you have a real DNS
+server setup for less overhead).
+
 # Host Setup
 
 Host setup will be dealt with in the following sections.
@@ -53,6 +60,7 @@ The following sections will be executed on your bastion host.
     mkdir -p ~/src/github/redhat-nfvpe/ && cd $_
     git clone https://github.com/redhat-nfvpe/telemetry-framework-rhv
     cd telemtry-framework-rhv
+    ansible-galaxy install -r requirements.yml
 
 ### Setup `telemetry-framework-rhv` configuration
 
@@ -124,7 +132,10 @@ Then we need to put in some configuration contents to these files.
 With our subscription information all setup, we can run the `bootstrap.yml`
 playbook to subscribe our server and setup the repositories.
 
-    ansible-playbook -i inventory/hosts.yml --ask-vault-pass playbooks/bootstrap.yml
+    ansible-playbook -i inventory/hosts.yml \
+      --limit virthost \
+      --ask-vault-pass \
+      playbooks/bootstrap.yml
 
 # RHV Engine virtual machine creation
 
@@ -200,3 +211,25 @@ Then create the `vars` for configuring the virtual machine.
 # Engine Configuration
 
 Engine configuration will be dealt with in the following sections.
+
+### Subscribe and setup repositories
+
+With our subscription information all setup, we can run the `bootstrap.yml`
+playbook to subscribe our engine host and setup the repositories.
+
+    ansible-playbook -i inventory/hosts.yml \
+      --limit engine \
+      --ask-vault-pass \
+      playbooks/bootstrap.yml
+
+## Install RHV engine
+
+Installation of RHV engine should be as simple as running the following commands:
+
+    cd ~/src/github/redhat-nfvpe/telemetry-framework-rhv
+    ansible-playbook -i inventory/rhv_engine/hosts.yml playbooks/engine-setup.yml
+
+After that, you should be able to access the web console at
+https://engine.dev.nfvpe.site/ovirt-engine/sso/login.html
+
+Login by default (per above) is `admin / admin`.
