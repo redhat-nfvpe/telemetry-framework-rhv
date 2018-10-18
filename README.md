@@ -19,7 +19,7 @@ Ansible playbooks against your host server).
 
 # Topology
 
-TODO
+[Topology](docs/images/telemetry_framework_on_rhv.png)
 
 # DNS Configuration
 
