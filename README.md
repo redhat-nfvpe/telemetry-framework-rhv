@@ -224,16 +224,6 @@ Then create the `vars` for configuring the virtual machine.
 
 Engine configuration will be dealt with in the following sections.
 
-### Subscribe and setup repositories
-
-With our subscription information all setup, we can run the `bootstrap.yml`
-playbook to subscribe our engine host and setup the repositories.
-
-    ansible-playbook -i inventory/hosts.yml \
-      --limit engine \
-      --ask-vault-pass \
-      playbooks/bootstrap.yml
-
 ## Install RHV engine
 
 Installation of RHV engine should be as simple as running the following commands:
