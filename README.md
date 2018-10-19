@@ -255,3 +255,31 @@ Login by default (per above) is `admin / admin`.
 
 The follow steps will require some interaction with the GUI available at the link provided
 in [Install RHV Engine](#install-rhv-engine) for the web interface.
+
+## Set Data Center to Local Storage
+
+On the left bar, select `Compute > Data Centers`.
+
+![Compute > Data Centers](docs/images/data-center-storage-local.png)
+
+Then right-click on the `Default` data center.
+
+![Edit Data Center](docs/images/data-center-edit-default.png)
+
+Change the _Storage Type_ from _Shared_ to _Local_.
+
+![Set storage Local](docs/images/data-center-storage-set-local.png)
+
+## Add a Host to the Data Center Cluster
+
+Now we need to add our host to the engine so that it can be managed, allowing
+us to create our virtual machines.
+
+![Hosts menu](docs/images/data-center-host-setup.png)
+
+And then click on the _New_ button and create your host (which in our case
+is the `10.19.110.7` host where we installed the RHV engine since we're
+doing a single node installation here. If you have the RHV engine somewhere
+else then you just add one or more hosts the same as we're doing here).
+
+![Add host](docs/images/data-center-add-host.png)
