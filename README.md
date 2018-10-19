@@ -227,6 +227,18 @@ Then create the `vars` for configuring the virtual machine.
 
 Engine configuration will be dealt with in the following sections.
 
+## Subscribe and setup repositories
+
+As done previously, we setup our `vars` file so that we can register the node and install
+the repositories that we need to get RHV engine setup on the virtual machine. Run the
+following commands to make this so.
+
+    cd ~/src/github/redhat-nfvpe/telemetry-framework-rhv
+    ansible-playbook -i inventory/hosts.yml \
+      --limit engine \
+      --ask-vault-pass \
+      playbooks/bootstrap.yml
+
 ## Install RHV engine
 
 Installation of RHV engine should be as simple as running the following commands:
