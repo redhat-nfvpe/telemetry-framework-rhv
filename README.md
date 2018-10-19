@@ -147,7 +147,8 @@ in `/home/images/engine/`. We'll use this to spin up our initial `engine` virtua
 > process, and likely failure. To resolve this, we can use `virt-edit` to inline delete the
 > invalid nameserver.
 >
->     sudo yum install guestfish -y
+>     yum install guestfish -y
+>     systemctl start libvirtd.service
 >     virt-edit --expr 's/nameserver 192.168.122.1//g' \
 >       -a /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2 /etc/resolv.conf
 
