@@ -7,6 +7,15 @@ is to provide documentation and automation for:
 * importing a RHEL 7.5 template
 * instantiating RHEL 7.5 virtual machines
 
+Currently the documentation below covers installation of a single VM hosting the
+RHV engine which uses the same node for the installation of managed VMs via the
+RHV engine. Ultimately this will be expanded to multiple nodes, with the entire
+system being automated via Ansible.
+
+As this is in the proof-of-concept stage, we're leveraging a single node with some
+manual configuration via the web interface, but that will eventually be converted
+to automation using the `oVirt.infra` role.
+
 # Prerequisites
 
 You'll need Ansible 2.6 or later along with a host machine already running
@@ -283,3 +292,26 @@ doing a single node installation here. If you have the RHV engine somewhere
 else then you just add one or more hosts the same as we're doing here).
 
 ![Add host](docs/images/data-center-add-host.png)
+
+You should now have a host that says it is _Non-Operational_ because we need to
+setup storage for the node. If you received a failure then you'll need to
+debug why this is happening through the logs on the host and the engine VM. The
+logs should be mostly available in `/var/log/` under some `ovirt-` directories.
+
+## Setup Storage
+
+Our next step is to create some directories and configure the _Storage Domains_
+to store our images, templates, and virtual machines on the node. 
+
+> **Local storage vs Shared storage**
+> We're going to be using local storage (which doesn't allow us to scale the
+> system past a single node all that cleanly). Future work here is to migrate
+> to installation of GlusterFS, NFS, or another distributed storage system
+> where we can leverage the _Shared_ storage method.
+
+Login to the host (at `10.19.110.7`) and run the following commands to create
+the proper directory structure, ownership, and filesystem permissions.
+
+    mkdir -p /var/local/data/images
+    chown 36:36 /var/local/data /var/local/data/images
+    chmod 0755 /var/local/data /var/local/data/images
