@@ -32,37 +32,6 @@ server setup for less overhead).
 
 Host setup will be dealt with in the following sections.
 
-## Download RHEL 7.5 cloud image
-
-You're downloading the image and _running the following commands on the **host** itself_.
-In the next section we'll swap over to our bastion host to automate the rest.
-
-Get the download link for your RHEL 7.5 cloud image from https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.5/x86_64/product-software
-
-You're looking for the latest _Red Hat Enterprise Linux 7.5 Update KVM Guest Image (20180925)_ (or newer).
-
-Create a directory for the image to live.
-
-    mkdir -p /home/images/engine/
-
-Once you've done that, download it onto the host machine with `curl`. The image should live
-in `/home/images/engine/`. We'll use this to spin up our initial `engine` virtual machine.
-
-    curl https://access.cdn.redhat.com//content/origin/files/sha256/<unique_string>/rhel-server-7.5-update-4-x86_64-kvm.qcow2?_auth_=<unique_auth_from_link> \
-      --output /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2
-      
-> **Invalid `resolv.conf` in guest image**
->
-> By default, the guest image has `nameserver 192.168.122.1` in the `/etc/resolv.conf` file.
-> Unfortunately this will cause us issues later on when we build the virtual machines for OpenShift
-> because the DNS will need to time out each time we run, resulting in a very long installation
-> process, and likely failure. To resolve this, we can use `virt-edit` to inline delete the
-> invalid nameserver.
->
->     sudo yum install guestfish -y
->     virt-edit --expr 's/nameserver 192.168.122.1//g' \
->       -a /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2 /etc/resolv.conf
-
 ## Setup repositories and register RHEL
 
 The following sections will be executed on your bastion host.
@@ -148,6 +117,40 @@ playbook to subscribe our server and setup the repositories.
       --limit virthost \
       --ask-vault-pass \
       playbooks/bootstrap.yml
+
+## Download RHEL 7.5 cloud image
+
+Connect to the host server at this point for this section.
+
+You're downloading the image and _running the following commands on the **host** itself_.
+In the next section we'll swap over to our bastion host to automate the rest.
+
+Get the download link for your RHEL 7.5 cloud image from https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.5/x86_64/product-software
+
+You're looking for the latest _Red Hat Enterprise Linux 7.5 Update KVM Guest Image (20180925)_ (or newer).
+
+Create a directory for the image to live.
+
+    mkdir -p /home/images/engine/
+
+Once you've done that, download it onto the host machine with `curl`. The image should live
+in `/home/images/engine/`. We'll use this to spin up our initial `engine` virtual machine.
+
+    curl https://access.cdn.redhat.com//content/origin/files/sha256/<unique_string>/rhel-server-7.5-update-4-x86_64-kvm.qcow2?_auth_=<unique_auth_from_link> \
+      --output /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2
+      
+> **Invalid `resolv.conf` in guest image**
+>
+> By default, the guest image has `nameserver 192.168.122.1` in the `/etc/resolv.conf` file.
+> Unfortunately this will cause us issues later on when we build the virtual machines for OpenShift
+> because the DNS will need to time out each time we run, resulting in a very long installation
+> process, and likely failure. To resolve this, we can use `virt-edit` to inline delete the
+> invalid nameserver.
+>
+>     yum install guestfish -y
+>     systemctl start libvirtd.service
+>     virt-edit --expr 's/nameserver 192.168.122.1//g' \
+>       -a /home/images/engine/rhel-server-7.5-update-4-x86_64-kvm.qcow2 /etc/resolv.conf
 
 # RHV Engine virtual machine creation
 
