@@ -250,3 +250,8 @@ After that, you should be able to access the web console at
 https://engine.dev.nfvpe.site/ovirt-engine/sso/login.html
 
 Login by default (per above) is `admin / admin`.
+
+# Post-Install Setup
+
+The follow steps will require some interaction with the GUI available at the link provided
+in [Install RHV Engine](#install-rhv-engine) for the web interface.
