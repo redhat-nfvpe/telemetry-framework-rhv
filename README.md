@@ -244,7 +244,7 @@ following commands to make this so.
 Installation of RHV engine should be as simple as running the following commands:
 
     cd ~/src/github/redhat-nfvpe/telemetry-framework-rhv
-    ansible-playbook -i inventory/hosts.yml playbooks/engine-setup.yml
+    ansible-playbook -i inventory/hosts.yml --ask-vault-pass playbooks/engine-setup.yml
 
 After that, you should be able to access the web console at
 https://engine.dev.nfvpe.site/ovirt-engine/sso/login.html
