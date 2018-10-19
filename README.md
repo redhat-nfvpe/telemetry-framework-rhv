@@ -294,9 +294,13 @@ else then you just add one or more hosts the same as we're doing here).
 ![Add host](docs/images/data-center-add-host.png)
 
 You should now have a host that says it is _Non-Operational_ because we need to
-setup storage for the node. If you received a failure then you'll need to
-debug why this is happening through the logs on the host and the engine VM. The
-logs should be mostly available in `/var/log/` under some `ovirt-` directories.
+setup networking and storage for the node. If you received a failure then you'll
+need to ebug why this is happening through the logs on the host and the engine VM.
+The ogs should be mostly available in `/var/log/` under some `ovirt-` directories.
+
+## Setup Networking
+
+TODO attach networking to the interfaces.
 
 ## Setup Storage
 
