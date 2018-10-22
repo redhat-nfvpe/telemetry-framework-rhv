@@ -300,7 +300,34 @@ The ogs should be mostly available in `/var/log/` under some `ovirt-` directorie
 
 ## Setup Networking
 
-TODO attach networking to the interfaces.
+Before we setup the storage for the node, we need to add the `ovirtmgmt` virtual
+interface to the node so that we can communicate with it properly. This will move
+your networking around a bit, and setup your existing interface on `eno1` to be
+on a bridged network `br1`. We'll be attaching `ovirtmgmt` to the `eno2` interface
+since we'll be setting the nodes up for static addressing, and we don't want to
+interfere with our existing DHCP network. Your networking requirements may differ.
+
+First let's load up our `dot7` host.
+
+![Hosts menu](docs/images/data-center-host-setup.png)
+
+Then click on the _Network Interfaces_ tab within the `dot7` host itself.
+
+![Host networking screen](docs/images/data-center-host-network-interfaces.png)
+
+Click on _Setup Host Networks_ then drag the `ovirtmgmt` networking interface over
+to the `eno1` physical interface. Before we make these changes, let's setup the
+interface to have a static IP address of `10.19.111.100` since our `eno2` network
+is designed to use `10.19.111.0/24` subnet.
+
+![ovirtmgmt interface static address](docs/images/data-center-ovirtmgmt-static-address.png)
+
+And with everything configured we can now click on the _OK_ button in the network
+configuration screen, and then in the _Setup Host dot7 Networks_ screen as well.
+
+If you had an existing SSH connection running on `10.19.110.7` then your connection
+may have been dropped. You should be able to connect back to the `10.19.111.100`
+address we just asssigned to the `ovirtmgmt` interface on `eno2`.
 
 ## Setup Storage
 
@@ -319,3 +346,28 @@ the proper directory structure, ownership, and filesystem permissions.
     mkdir -p /var/local/data/images
     chown 36:36 /var/local/data /var/local/data/images
     chmod 0755 /var/local/data /var/local/data/images
+
+Now that we've configured our directories and setup the proper permissions and
+ownership, we need to go back to the web interface and create _Storage Domains_
+that get assigned to the host itself for storing of our virtual machine
+templates and images.
+
+Go to _Storage > Domains_ from the left menu.
+
+![Storage domain configuration](docs/images/data-center-storage-domains.png)
+
+Then we're going to create the new data domain by clicking on _New Domain_. We
+need to configure the local storage to point at the directory we just created above.
+The default drop down for _Storage Type_ is _NFS_ and we're going to change it
+to _Local on Host_.
+
+> **Future Storage**
+> 
+> As this is a POC we're setting this up fairly dirty, but in the future we'll
+> convert this to shared storage using something like GlusterFS or NFS.
+
+![Storage new domain](docs/images/data-center-storage-domain-config.png)
+
+Once we've configured the storage, click on _OK_ and you should see a pop
+up box saying the storage has been configured on the host.
+
