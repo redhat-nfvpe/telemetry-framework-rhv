@@ -403,3 +403,66 @@ discuss in the next section.
 
 ## Create RHEL virtual machines for OpenShift
 
+There is a reference playbook that matches our initial topology diagram at the top
+of this document. For larger installations, you simply need to adjust the YAML list
+of machines that you want to have installed in your environment. We're just using
+a simple 3 node deployment for the POC so that we limit the number of resources
+required to get stood up.
+
+The following is the default list of virtual machines that will be configured for
+the service assurance framework. The requirement of 3 virtual machines is for the
+installation of GlusterFS within OpenShift for storage and persistent volumes.
+
+    vms:
+      - name: openshift-master
+        tag: openshift_master
+        profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-master.dev.nfvpe.site
+          nic_ip_address: 10.19.111.101
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
+      - name: openshift-node-1
+        tag: openshift_node
+        profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-node-1.dev.nfvpe.site
+          nic_ip_address: 10.19.111.102
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
+      - name: openshift-node-2
+        tag: openshift_node
+        profile: "{{ openshift_node }}"
+        cloud_init:
+          host_name: openshift-node-2.dev.nfvpe.site
+          nic_ip_address: 10.19.111.103
+          root_password: redhat
+          dns_servers: 10.19.110.9
+          dns_search: dev.nfvpe.site
+          nic_boot_protocol: static
+          nic_netmask: 255.255.255.0
+          nic_gateway: 10.19.111.254
+          nic_on_boot: true
+          nic_name: eth0
+
+Instantiation of the virtual machines can be run from our `telemetry-framework-rhv`
+source directory with Ansible, much like we've been doing previously. The following
+commands are run on your bastion machine.
+
+    cd ~/src/github/redhat-nfvpe/telemetry-framework-rhv
+    ansible-playbook -i inventory/hosts.yml --ask-vault-pass playbooks/vm-infra.yml
+
+After your virtual machines have instantiated, the next steps are to install your
+OpenShift environment to the virtual machines.
