@@ -371,3 +371,35 @@ to _Local on Host_.
 Once we've configured the storage, click on _OK_ and you should see a pop
 up box saying the storage has been configured on the host.
 
+# Templates and Virtual Machines
+
+We're nearing the end of our configuration. We need to create the RHEL VM
+templates, and then spin up some virtual machines from the template.
+
+## Upload RHEL to the Engine
+
+As we previously downloaded and modified the RHEL cloud image onto our host,
+we'll use the same file and push it into the engine virtual machine so that
+our templates can be setup with that same image. To start, we need to login
+to our host machine, and then we'll `scp` the file over to the engine virtual
+machine so that we can create our RHEL template with Ansible.
+
+    ssh root@10.19.111.100
+    cd /home/images/engine
+    scp rhel-server-7.5-update-4-x86_64-kvm.qcow2 cloud-user@10.19.110.80:
+
+## Create RHEL template on the engine
+
+From our bastion host (laptop) we'll create the RHEL template with our
+`telemetry-framework-rhv` repository and playbooks. Run the following commands
+to import the RHEL image to the host and create our RHEL 7.5 VM template.
+
+    cd ~/src/github/telemetry-framework-rhv/
+    ansible-playbook -i inventory/hosts.yml --ask-vault-pass playbooks/rhel-template.yml
+
+At this point, the final step is create the virtual machines for the OpenShift
+installation. You will likely want to modify the topology/node list which we'll
+discuss in the next section.
+
+## Create RHEL virtual machines for OpenShift
+
