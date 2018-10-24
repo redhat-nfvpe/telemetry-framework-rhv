@@ -466,3 +466,9 @@ commands are run on your bastion machine.
 
 After your virtual machines have instantiated, the next steps are to install your
 OpenShift environment to the virtual machines.
+
+> **Teardown Virtual Machines**
+>
+> You can teardown the virtual machines as well to rebuild the topology with:
+> 
+>     ansible-playbook -i inventory/hosts.yml -e "vm_state=absent" --ask-vault-pass playbooks/vm-infra.yml
